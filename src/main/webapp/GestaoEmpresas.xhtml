@@ -15,19 +15,20 @@
 		</f:metadata>
 
 		<h:form>
+		<p:messages autoUpdate="true" />
 		
 			<p:toolbar>
 			
 				<f:facet name="left">
 
-					<p:inputText placeholder="Digite aqui um termo para pesquisa... " size="30"/>
-					<p:commandButton value="Pesquisar" icon="fa fa fa-search" />
+					<p:inputText placeholder="Digite aqui um termo para pesquisa... " size="30" value="#{gestaoEmpresasBean.termoPesquisa}"/>
+					<p:commandButton value="Pesquisar" icon="fa fa-search" actionListener="#{gestaoEmpresasBean.pesquisar}" update="empresas-data-table"/>
 
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
 					</span>
 
-					<p:commandButton value="Nova" icon="fa fa-plus" />
+					<p:commandButton value="Nova" icon="fa fa-plus" onclick="PF('empresaDialogWidgetVar').show()"/>
 
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
@@ -47,7 +48,7 @@
 
 			</p:toolbar>
 
-			<p:dataTable value="#{gestaoEmpresasBean.listaEmpresas}"
+			<p:dataTable id="empresas-data-table" value="#{gestaoEmpresasBean.listaEmpresas}"
 				var="empresa" emptyMessage="Nenhuma empresa encontrada."
 				paginator="true" rows="10" paginatorPosition="bottom">
 
@@ -68,6 +69,14 @@
 				</p:column>
 
 			</p:dataTable>
+			
+			<p:dialog header="Nova empresa" widgetVar="empresaDialogWidgetVar" 
+			modal="true"
+			resizable="false"
+			draggable="false"
+			closeOnEscape="true">
+			<p:commandButton  value="Teste"/>
+			</p:dialog>
 		</h:form>
 	</ui:define>
 
