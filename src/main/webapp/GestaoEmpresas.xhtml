@@ -15,20 +15,24 @@
 		</f:metadata>
 
 		<h:form>
-		<p:messages autoUpdate="true" />
-		
+			<p:messages autoUpdate="true" />
+
 			<p:toolbar>
-			
+
 				<f:facet name="left">
 
-					<p:inputText placeholder="Digite aqui um termo para pesquisa... " size="30" value="#{gestaoEmpresasBean.termoPesquisa}"/>
-					<p:commandButton value="Pesquisar" icon="fa fa-search" actionListener="#{gestaoEmpresasBean.pesquisar}" update="empresas-data-table"/>
+					<p:inputText placeholder="Digite aqui um termo para pesquisa... "
+						size="30" value="#{gestaoEmpresasBean.termoPesquisa}" />
+					<p:commandButton value="Pesquisar" icon="fa fa-search"
+						actionListener="#{gestaoEmpresasBean.pesquisar}"
+						update="empresas-data-table" />
 
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
 					</span>
 
-					<p:commandButton value="Nova" icon="fa fa-plus" onclick="PF('empresaDialogWidgetVar').show()"/>
+					<p:commandButton value="Nova" icon="fa fa-plus"
+						onclick="PF('empresaDialogWidgetVar').show()" />
 
 					<span class="ui-separator"> <span
 						class="ui-icon ui-icon-grip-dotted-vertical" />
@@ -36,21 +40,22 @@
 
 
 					<p:commandButton title="Editar" icon="fa fa-edit" />
-						<p:commandButton title="Excluir" icon="fa fa-trash" />
+					<p:commandButton title="Excluir" icon="fa fa-trash" />
 
-							<span class="ui-separator"> <span
-								class="ui-icon ui-icon-grip-dotted-vertical" />
-							</span>
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
 
-							<p:commandButton title="Exportar para o Excel"
-								icon="fa fa-file-excel-o" />
+					<p:commandButton title="Exportar para o Excel"
+						icon="fa fa-file-excel-o" />
 				</f:facet>
 
 			</p:toolbar>
 
-			<p:dataTable id="empresas-data-table" value="#{gestaoEmpresasBean.listaEmpresas}"
-				var="empresa" emptyMessage="Nenhuma empresa encontrada."
-				paginator="true" rows="10" paginatorPosition="bottom">
+			<p:dataTable id="empresas-data-table"
+				value="#{gestaoEmpresasBean.listaEmpresas}" var="empresa"
+				emptyMessage="Nenhuma empresa encontrada." paginator="true"
+				rows="10" paginatorPosition="bottom">
 
 				<p:column headerText="Razão Social" sortBy="#{empresa.razaoSocial}">
 					<h:outputText value="#{empresa.razaoSocial}"></h:outputText>
@@ -69,13 +74,46 @@
 				</p:column>
 
 			</p:dataTable>
-			
-			<p:dialog header="Nova empresa" widgetVar="empresaDialogWidgetVar" 
-			modal="true"
-			resizable="false"
-			draggable="false"
-			closeOnEscape="true">
-			<p:commandButton  value="Teste"/>
+
+			<p:dialog header="Nova empresa" widgetVar="empresaDialogWidgetVar"
+				modal="true" resizable="false" closeOnEscape="true">
+
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Razão Social: " for="razaoSocial" />
+					<p:inputText label="razaoSocial" id="razaoSocial" size="80"
+						maxlength="120" />
+
+					<p:outputLabel value="Nome Fantasia: " for="nomeFantasia" />
+					<p:inputText label="nomeFantasia" id="nomeFantasia" size="80"
+						maxlength="80" />
+
+					<p:outputLabel value="Tipo empresa: " for="tipo" />
+					<p:selectOneMenu id="tipo">|
+                 <f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{gestaoEmpresasBean.tiposEmpresa}"
+							var="tipoEmpresa" itemLabel="#{tipoEmpresa.descricao}"
+							itemValue="#{tipoEmpresa}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="CNPJ: " for="cnpj" />
+					<p:inputMask mask="99.999.999/9999-99" label="cnpj" id="cnpj"
+						size="80" maxlength="18" />
+
+
+					<p:outputLabel value="Data Fundacao: " for="dataFundacao" />
+					<p:calendar pattern="dd/MM/yyyy" label="dataFundacao"
+						id="dataFundacao" size="30" />
+
+
+					<p:outputLabel value="Ramo Atividade: " for="ramoAtividade" />
+					<p:autoComplete label="ramoAtividade" id="ramoAtividade" size="80" completeMethod="#{gestaoEmpresasBean.completarRamoAtividades}"
+					 converter="#{gestaoEmpresasBean.ramoAtividadeConverter}" 
+					 var="ramoAtividade" itemLabel="#{ramoAtividade.descricao}" itemValue="#{ramoAtividade}"/>
+
+					<h:outputLabel />
+					<p:commandButton value="Salvar" />
+				</h:panelGrid>
 			</p:dialog>
 		</h:form>
 	</ui:define>
