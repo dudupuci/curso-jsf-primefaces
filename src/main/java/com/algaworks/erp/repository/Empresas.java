@@ -37,6 +37,15 @@ public class Empresas implements Serializable {
 		return query.getResultList();
 	}
 	
+	
+	public List<Empresa> listar() {
+		TypedQuery<Empresa> query = entityManager
+				.createQuery("from Empresa", Empresa.class);
+	
+		return query.getResultList();
+	}
+	
+	
 	public Empresa guardar(Empresa empresa) {
 		return entityManager.merge(empresa);
 	}

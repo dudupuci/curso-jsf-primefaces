@@ -1,15 +1,15 @@
 package com.algaworks.erp.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.algaworks.erp.model.Empresa;
-import com.algaworks.erp.model.TipoEmpresa;
+import com.algaworks.erp.repository.Empresas;
 
 @Named // Para que fique acessivel a partir das nossas páginas de html
 @ViewScoped // A instancia é criada quando a requisicao é feita, e vice-versa. (Tempo de vida)
@@ -17,23 +17,22 @@ public class GestaoEmpresasBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Empresa empresa = new Empresa();
+	@Inject
+	private Empresas empresas;
 	
-	public void salvar() {
-		System.out.println("Razão social: "+empresa.getRazaoSocial() +"\n"
-				+          "Tipo: "+empresa.getTipo());
+	private List<Empresa> listaEmpresas = new ArrayList<Empresa>();
+	
+	public void todasEmpresas() {
+		listaEmpresas = empresas.listar();
+	}
+
+	public List<Empresa> getListaEmpresas() {
+		return listaEmpresas;
+	}
+
+	public void setListaEmpresas(List<Empresa> listaEmpresas) {
+		this.listaEmpresas = listaEmpresas;
 	}
 	
-	public String ajuda() {
-		return "AjudaGestaoEmpresas?faces-redirect=true";
-	}
-	
-	public Empresa getEmpresa() {
-		return empresa;
-	}
-	
-	public TipoEmpresa[] getTiposEmpresa() {
-		return TipoEmpresa.values();
-	}
 
 }

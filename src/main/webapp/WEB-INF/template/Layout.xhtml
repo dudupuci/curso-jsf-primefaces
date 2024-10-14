@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
 
 	<meta charset="UTF-8" />
-	<title>Ajuda</title>
+	<title>Gestão Empresas</title>
 
 	<h:outputStylesheet library="algaworks" name="estilo.css" />
+
 
 </h:head>
 
@@ -18,17 +21,14 @@
 		<h:graphicImage library="algaworks" name="logo.png" />
 	</header>
 
-	<h2>Ajuda</h2>
+	<h2 id="titulo-pagina">
+		<ui:insert name="titulo" />
+	</h2>
+
 
 	<div id="conteudo">
-		<h:form>
-			<p>Está é a ajuda da página de cadastro de empresas</p>
+		<ui:insert name="conteudo" />
 
-			<p>
-				<h:commandLink value="Voltar" action="GestaoEmpresas?faces-redirect=true" />
-			</p>
-
-		</h:form>
 	</div>
 
 
