@@ -1,50 +1,133 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="WEB-INF/template/Layout.xhtml  ">
 
-	<meta charset="UTF-8" />
-	<title>Gestão Empresas</title>
+	<ui:define name="titulo">Cadastro de Empresas</ui:define>
 
-	<h:outputStylesheet library="algaworks" name="estilo.css" />
+	<ui:define name="conteudo">
 
-</h:head>
+		<f:metadata>
+			<f:viewAction action="#{gestaoEmpresasBean.todasEmpresas}"></f:viewAction>
+		</f:metadata>
 
-
-<h:body>
-
-	<header>
-		<h:graphicImage library="algaworks" name="logo.png" />
-	</header>
-
-
-	<div id="conteudo">
 		<h:form>
-			<h:panelGrid columns="2">
-				<h:outputLabel value="Razão Social: " for="razaoSocial" />
-				<h:inputText id="razaoSocial" />
+			<p:messages autoUpdate="true" />
 
-				<h:outputLabel value="Nome Fantasia: " for="nomeFantasia" />
-				<h:inputText id="nomeFantasia" />
+			<p:toolbar>
 
-				<h:outputLabel value="Tipo Empresa: " for="tipo" />
-				<h:selectOneMenu id="tipo" />
-				<f:selectItem itemLabel="Selecione..." />
-				<f:selectItem itemLabel="MEI" itemValue="MEI" />
-				<f:selectItem itemLabel="LTDA" itemValue="LTDA" />
+				<f:facet name="left">
+
+					<p:inputText id="termo-pesquisa" placeholder="Digite aqui um termo para pesquisa... "
+						size="30" value="#{gestaoEmpresasBean.termoPesquisa}" />
+					<p:commandButton value="Pesquisar" icon="fa fa-search"
+						actionListener="#{gestaoEmpresasBean.pesquisar}"
+						update="empresas-data-table" process="@this termo-pesquisa"/>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton value="Nova" icon="fa fa-plus"
+						oncomplete="PF('empresaDialogWidgetVar').show()" 
+						actionListener="#{gestaoEmpresasBean.prepararNovaEmpresa}"
+						update="empresa-dialog" process="@this"/>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
 
 
-				<h:outputLabel />
-				<h:commandButton value="Salvar" />
-			</h:panelGrid>
+					<p:commandButton title="Editar" icon="fa fa-edit" />
+					<p:commandButton title="Excluir" icon="fa fa-trash" />
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton title="Exportar para o Excel"
+						icon="fa fa-file-excel-o" />
+				</f:facet>
+
+			</p:toolbar>
+
+             <!-- TABELA QUE LISTA EMPRESAS -->
+
+			<p:dataTable id="empresas-data-table"
+				value="#{gestaoEmpresasBean.listaEmpresas}" var="empresa"
+				emptyMessage="Nenhuma empresa encontrada." paginator="true"
+				rows="10" paginatorPosition="bottom">
+
+				<p:column headerText="Razão Social" sortBy="#{empresa.razaoSocial}">
+					<h:outputText value="#{empresa.razaoSocial}"></h:outputText>
+				</p:column>
+
+				<p:column headerText="Nome Fantasia">
+					<h:outputText value="#{empresa.nomeFantasia}"></h:outputText>
+				</p:column>
+
+				<p:column headerText="Tipo Empresa">
+					<h:outputText value="#{empresa.tipo}"></h:outputText>
+				</p:column>
+
+				<p:column headerText="Ramo atividade">
+					<h:outputText value="#{empresa.ramoAtividade.descricao}"></h:outputText>
+				</p:column>
+
+			</p:dataTable>
+			
+			<!-- BOTAO DE SALVAR NOVA EMPRESA -->
+
+			<p:dialog id="empresa-dialog" header="Nova empresa" widgetVar="empresaDialogWidgetVar"
+				modal="true" resizable="false" closeOnEscape="true">
+				
+				
+				<p:messages id="empresa-messages"/>
+				
+				<h:panelGrid id="empresa-panel-grid" columns="2" rendered="#{gestaoEmpresasBean.empresa ne null}">
+					<p:outputLabel value="Razão Social: " for="razaoSocial" />
+					<p:inputText id="razaoSocial" size="80"
+						maxlength="120" value="#{gestaoEmpresasBean.empresa.razaoSocial}"/>
+
+					<p:outputLabel value="Nome Fantasia: " for="nomeFantasia" />
+					<p:inputText id="nomeFantasia" size="80"
+						maxlength="80" value="#{gestaoEmpresasBean.empresa.nomeFantasia}"/>
+
+					<p:outputLabel value="Tipo empresa: " for="tipo" />
+					<p:selectOneMenu id="tipo" value="#{gestaoEmpresasBean.empresa.tipo}">|
+                 <f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{gestaoEmpresasBean.tiposEmpresa}"
+							var="tipoEmpresa" itemLabel="#{tipoEmpresa.descricao}"
+							itemValue="#{tipoEmpresa}" />
+					</p:selectOneMenu>
+
+
+					<p:outputLabel value="CNPJ: " for="cnpj" />
+					<p:inputMask mask="99.999.999/9999-99" id="cnpj"
+						size="80" maxlength="18" value="#{gestaoEmpresasBean.empresa.cnpj}"/>
+
+
+					<p:outputLabel value="Data Fundacao: " for="dataFundacao" />
+					<p:calendar pattern="dd/MM/yyyy"
+						id="dataFundacao" size="30" value="#{gestaoEmpresasBean.empresa.dataFundacao}" />
+
+
+					<p:outputLabel value="Ramo Atividade: " for="ramoAtividade" />
+					<p:autoComplete id="ramoAtividade" size="80" completeMethod="#{gestaoEmpresasBean.completarRamoAtividades}"
+					 converter="#{gestaoEmpresasBean.ramoAtividadeConverter}" 
+					 var="ramoAtividade" itemLabel="#{ramoAtividade.descricao}" itemValue="#{ramoAtividade}" value="#{gestaoEmpresasBean.empresa.ramoAtividade}"/>
+
+					<h:outputLabel />
+					<p:commandButton value="Salvar" actionListener="#{gestaoEmpresasBean.salvar}" 
+					update="empresas-data-table empresa-panel-grid empresa-messages" 
+					oncomplete="if(!args.validationFailed) PF('empresaDialogWidgetVar').hide()" process="empresa-dialog"/>
+					
+				</h:panelGrid>
+			</p:dialog>
 		</h:form>
-	</div>
+	</ui:define>
 
-
-	<footer> Curso Online "JSF e PrimeFaces Essencial" </footer>
-
-
-</h:body>
-
-</html>
+</ui:composition>
