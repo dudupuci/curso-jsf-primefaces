@@ -86,6 +86,7 @@
 			<p:dialog id="empresa-dialog" header="Nova empresa" widgetVar="empresaDialogWidgetVar"
 				modal="true" resizable="false" closeOnEscape="true">
 				
+				<p:defaultCommand target="salvar-command-button" scope="empresa-dialog" />
 				
 				<p:messages id="empresa-messages"/>
 				
@@ -123,7 +124,7 @@
 					 var="ramoAtividade" itemLabel="#{ramoAtividade.descricao}" itemValue="#{ramoAtividade}" value="#{gestaoEmpresasBean.empresa.ramoAtividade}"/>
 
 					<h:outputLabel />
-					<p:commandButton value="Salvar" actionListener="#{gestaoEmpresasBean.salvar}" 
+					<p:commandButton id="salvar-command-button" value="Salvar" actionListener="#{gestaoEmpresasBean.salvar}" 
 					update="empresas-data-table empresa-panel-grid empresa-messages" 
 					oncomplete="if(!args.validationFailed) PF('empresaDialogWidgetVar').hide()" process="empresa-dialog"/>
 					
