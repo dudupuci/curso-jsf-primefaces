@@ -1,6 +1,7 @@
 package com.algaworks.erp.controller;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,19 +50,36 @@ public class GestaoEmpresasBean implements Serializable {
 	public void prepararNovaEmpresa() {
 		empresa = new Empresa();
 	}
+	
+	public void prepararEdicaoEmpresa() {
+		ramoAtividadeConverter = new RamoAtividadeConverter(Arrays.asList(empresa.getRamoAtividade()));
+	}
+	
+	public void excluir() {
+		this.cadastroEmpresaService.excluir(empresa);
+		empresa = null;
+		atualizarRegistros();
+		
+		messages.info("Empresa excluída com sucesso");
+		
+	}
 
 	public void salvar() {
 		this.cadastroEmpresaService.salvar(empresa);
 
+		atualizarRegistros();
+		messages.info("Empresa salva com sucesso");
+
+		RequestContext.getCurrentInstance().update(Arrays.asList("frm:empresas-data-table", "frm:messages"));
+	}
+
+	private void atualizarRegistros() {
 		if (jaHouvePesquisa()) {
 			pesquisar();
 		} else {
 			todasEmpresas();
 		}
-
-		messages.info("Empresa salva com sucesso");
-
-		RequestContext.getCurrentInstance().update(Arrays.asList("frm:empresas-data-table", "frm:messages"));
+	
 	}
 
 	public void pesquisar() {
@@ -112,5 +130,13 @@ public class GestaoEmpresasBean implements Serializable {
 
 	public Empresa getEmpresa() {
 		return empresa;
+	}
+	
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+	
+	public boolean isEmpresaSelected() {
+		return this.empresa != null && this.empresa.getId() != null;
 	}
 }

@@ -107,6 +107,7 @@ public class Empresa implements Serializable {
 	public RamoAtividade getRamoAtividade() {
 		return ramoAtividade;
 	}
+	
 
 	public TipoEmpresa getTipo() {
 		return tipo;
